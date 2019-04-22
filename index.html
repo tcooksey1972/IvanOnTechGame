@@ -6,8 +6,8 @@
         <script src="eth.js"></script>
     </head>
     <body>
-        <h1>Game website</h1>
-        <h2>Game website second heading</h2>
+        <h1>Pump your BAG!</h1>
+        <h2>Collect as many tokens as you can before the time runs out!</h2>
         <script>
             //configure game(height, width, render-type, game loop functions)
 
@@ -15,16 +15,18 @@
             var knight;
             var crates;
             var coinTimer;
+
             var score = 0;
             var scoreText;
 
-            var secondsLeft = 60;
+            var secondsLeft = 30;
             var timeLeftText;
             var timeLeftTimer;
+
             var gameOver = false;
-            var coinsSent = true;
+            var coinsSent = false;
 
-
+            //configure the game (height, width, render-type, game loop functions)
             var config = {
                 width: 800,
                 height:500,
@@ -37,9 +39,8 @@
                 physics:{
                     default:"arcade",
                     arcade:{
-                        gravity:{y:600},
-                        debug:false,
-                    }
+                        gravity:{y:800},
+                        debug:false                    }
                 }
 
             }
@@ -99,22 +100,24 @@
                 crates = this.physics.add.staticGroup();
 
                 //create the floor
-                crates.create(40,460, "crate");
-                crates.create(120,460, "crate");
-                crates.create(200,460, "crate");
-                crates.create(280,460, "crate");
-                crates.create(360,460, "crate");
-                crates.create(440,460, "crate");
-                crates.create(740,460, "crate");
-                crates.create(600,350, "crate");
+                crates.create(40,460,"crate");
+                crates.create(120,460,"crate");
+                crates.create(200,460,"crate");
+                crates.create(280,460,"crate");
+                crates.create(360,460,"crate");
+                crates.create(440,460,"crate");
+                crates.create(740,460,"crate");
+                crates.create(670,370,"crate");
+                crates.create(600,370,"crate");
+                crates.create(620,120,"crate");
 
-                //create platform 1
-                crates.create(440,360, "crate");
-                crates.create(480,260, "crate");
 
-                //crates in the air
-                crates.create(280,260, "crate");
-                crates.create(180,220, "crate");
+                //create in the air
+                crates.create(440,360,"crate");
+                crates.create(480,260,"crate");
+                crates.create(280,260,"crate");
+                crates.create(180,220,"crate");
+        
 
                 //create animations
                 this.anims.create({
@@ -152,6 +155,22 @@
                     repeat: 1,
                 });
                 
+                cursors = this.input.keyboard.createCursorKeys();
+
+                coinTimer = this.time.addEvent({
+                    delay: Phaser.Math.Between(1000,3000),
+                    callback: generateCoins,
+                    callbackScope: this,
+                    repeat: -1,
+
+                });
+                timeLeftTimer=this.time.addEvent({
+                    delay: 1000,
+                    callback: updateTimeLeft,
+                    callbackScope: this,
+                    repeat: -1,
+            });
+
                 this.physics.add.collider(crates, knight);
 
                 scoreText = this.add.text(16, 16, "Bitcoin bag: 0", 
@@ -161,22 +180,6 @@
                                         {fontsize: "32px",
                                         fill: "#f00"});                        
 
-                cursors = this.input.keyboard.createCursorKeys();
-
-                coinTimer = this.time.addEvent({
-                    delay: Phaser.Math.Between(0,5000),
-                    callback: generateCoins,
-                    callbackScope: this,
-                    repeat: -1,
-
-                });
-
-                timeLeftTimer=this.time.addEvent({
-                    delay: 1000,
-                    callback: updateTimeLeft,
-                    callbackScope: this,
-                    repeat: -1,
-            });
             }
             function updateTimeLeft(){
                 if(gameOver){
@@ -188,7 +191,7 @@
                     else{
                             mintAfterGame(address, score);
                         }
-                        coinSent = true;
+                        coinsSent = true;
                     }
                     return;
                 }

@@ -323,9 +323,9 @@ var abi = [
 
   var contract = new web3.eth.contract(abi, "0xa828b9B92Af145ae9A61A34c60155c17F744a0aa")
 
-  function minitAfterGame(address, nrOfTokens){
-      contract.methods.mint(address. nrOfTokens).send({from: address})
-      .on('reciept', recipet => {
-          alert("Transaction Complete");
+  function mintAfterGame(address, nrOfTokens){
+      contract.methods.mint(address, nrOfTokens).send({from: address})
+      .on('receipt', receipt => {
+        alert("Transaction Complete");
       })
   }
